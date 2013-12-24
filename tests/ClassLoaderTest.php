@@ -1,7 +1,7 @@
 <?php
 use Ripple\Loader\ClassLoader;
 
-require '../src/Ripple/Loader/ClassLoader.php';
+require_once __DIR__.'/../src/Ripple/Loader/ClassLoader.php';
 
 /**
  * PHPUnit Test suite for ClassLoader
