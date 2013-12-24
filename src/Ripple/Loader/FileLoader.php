@@ -1,16 +1,10 @@
 <?php
-namespace Ripple\Core;
+namespace Ripple\Loader;
 
 /**
- * ClassLoader implementation that implements the technical interoperability
- * standards for PHP 5.3 namespaces and class names.
- *
- * http://groups.google.com/group/php-standards/web/final-proposal
- *
- *     // Example which loads classes for the Doctrine Common package in the
- *     // Doctrine\Common namespace.
- *     $classLoader = new ClassLoader('Doctrine\Common', '/path/to/doctrine');
- *     $classLoader->register();
+ * FileLoader implementation that abstracts the technical interoperability
+ * standards for PHP 5.3 namespaces and class names to any file name that
+ * needs to be resolved.
  *
  * Based on SplClassLoader:
  * https://gist.github.com/jwage/221634
@@ -18,23 +12,26 @@ namespace Ripple\Core;
  * @author	James Tracy <james.a.tracy@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  */
-class ClassLoader
+class FileLoader
 {
-    private $_fileExtension = '.php';
+    private $_fileExtension = '';
     private $_namespace;
     private $_includePath;
     private $_namespaceSeparator = '\\';
 
     /**
-     * Creates a new ClassLoader that loads classes of the
+     * Creates a new FileLoader that loads classes of the
      * specified namespace.
      * 
      * @param string $ns The namespace to use.
+     * @param string $includePath The include path.
+     * @param string $extension The file extension.
      */
-    public function __construct($ns = null, $includePath = null)
+    public function __construct($ns = null, $includePath = null, $extension = '')
     {
         $this->_namespace = $ns;
         $this->_includePath = $includePath;
+		$this->_fileExtension = $extension;
     }
 
     /**
@@ -97,57 +94,27 @@ class ClassLoader
         return $this->_fileExtension;
     }
 
-    /**
-     * Installs this class loader on the SPL autoload stack.
-     */
-    public function register()
-    {
-        spl_autoload_register(array($this, 'loadClass'));
-    }
-
-    /**
-     * Uninstalls this class loader from the SPL autoloader stack.
-     */
-    public function unregister()
-    {
-        spl_autoload_unregister(array($this, 'loadClass'));
-    }
-
 	/**
-	 * Get the given class or interface path.
+	 * Get the given file path.
 	 *
-	 * @param string $className The name of the class
+	 * @param string $identName The identifier name
 	 * @return string|null
 	 */
-	public function getClassPath($className)
+	public function getFilePath($identName)
 	{
-		if (null === $this->_namespace || $this->_namespace.$this->_namespaceSeparator === substr($className, 0, strlen($this->_namespace.$this->_namespaceSeparator))) {
-            $fileName = '';
+		if (null === $this->_namespace || $this->_namespace.$this->_namespaceSeparator === substr($identName, 0, strlen($this->_namespace.$this->_namespaceSeparator))) {
+		    $fileName = '';
             $namespace = '';
-            if (false !== ($lastNsPos = strripos($className, $this->_namespaceSeparator))) {
-                $namespace = substr($className, 0, $lastNsPos);
-                $className = substr($className, $lastNsPos + 1);
+            if (false !== ($lastNsPos = strripos($identName, $this->_namespaceSeparator))) {
+                $namespace = substr($identName, 0, $lastNsPos);
+                $identName = substr($identName, $lastNsPos + 1);
                 $fileName = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
             }
-            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
+            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $identName) . $this->_fileExtension;
 
             return ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
-		}
+        }
 		
 		return null;
 	}
-	
-    /**
-     * Loads the given class or interface.
-     *
-     * @param string $className The name of the class to load.
-     * @return void
-     */
-    public function loadClass($className)
-    {
-        $path = $this->getClassPath($className);
-		if($path !== null) {
-            require ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
-        }
-    }
 }

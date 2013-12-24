@@ -1,7 +1,7 @@
 <?php
-use Ripple\Core\ClassLoader;
+use Ripple\Loader\ClassLoader;
 
-require '../src/Ripple/Core/ClassLoader.php';
+require '../src/Ripple/Loader/ClassLoader.php';
 
 /**
  * PHPUnit Test suite for ClassLoader
@@ -9,19 +9,19 @@ require '../src/Ripple/Core/ClassLoader.php';
  */
 class ClassLoaderTest extends PHPUnit_Framework_TestCase
 {
-    public function testMethod_getClassPath()
+    public function testMethod_getFilePath()
     {
 		// simple namespace
 		$loader = new ClassLoader('Doctrine', '/path/to/doctrine');
-		$this->assertEquals($loader->getClassPath('Doctrine\\Common\\Request'), '/path/to/doctrine/Doctrine/Common/Request.php');
+		$this->assertEquals($loader->getFilePath('Doctrine\\Common\\Request'), '/path/to/doctrine/Doctrine/Common/Request.php');
 		
 		// nested namespace
         $loader = new ClassLoader('Doctrine\\Common', '/path/to/doctrine');
-		$this->assertEquals($loader->getClassPath('Doctrine\\Common\\Request'), '/path/to/doctrine/Doctrine/Common/Request.php');
+		$this->assertEquals($loader->getFilePath('Doctrine\\Common\\Request'), '/path/to/doctrine/Doctrine/Common/Request.php');
 		
 		// invalid
 		$loader = new ClassLoader('Doctrine\\Common', '/path/to/doctrine');
-		$this->assertNull($loader->getClassPath('Doctrine\\Core\\Request'));
+		$this->assertNull($loader->getFilePath('Doctrine\\Core\\Request'));
     }
 }
 ?>
