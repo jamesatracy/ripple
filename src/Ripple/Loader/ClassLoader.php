@@ -16,6 +16,7 @@ require __DIR__.'/FileLoader.php';
  * Based on SplClassLoader:
  * https://gist.github.com/jwage/221634
  *
+ * @since 0.1.0
  * @author	James Tracy <james.a.tracy@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  */
