@@ -2,9 +2,10 @@
 namespace Ripple\Routing;
 
 use \Ripple\HTTP\Request;
+use \Ripple\Routing\RouteActionInterface;
 
 /**
- * Represents an action to take on a matched route.
+ * Represents a basic action to take on a matched route.
  * The action must be a valid 'callable' string or array that can be
  * passed to call_user_func_array().
  *
@@ -12,7 +13,7 @@ use \Ripple\HTTP\Request;
  * @author	James Tracy <james.a.tracy@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  */
-class RouteAction
+class RouteAction implements RouteActionInterface
 {
     /** @var string|array */
     protected $callable = null;

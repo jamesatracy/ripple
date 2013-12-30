@@ -3,6 +3,7 @@ use Ripple\HTTP\Request;
 use Ripple\Routing\RouteAction;
 
 require_once __DIR__.'/../src/Ripple/HTTP/Request.php';
+require_once __DIR__.'/../src/Ripple/Routing/RouteActionInterface.php';
 require_once __DIR__.'/../src/Ripple/Routing/RouteAction.php';
 
 function global_callback($request)
