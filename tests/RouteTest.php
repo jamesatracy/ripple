@@ -62,5 +62,36 @@ class RouteTest extends PHPUnit_Framework_TestCase
 		$route = new Route('GET', '/path/', '', true);
 		$this->assertFalse($route->matches($request));
 	}
+	
+	public function testBehavior_matchedParameters()
+	{
+	    $request = new Request();
+        $request->setServer('SCRIPT_NAME', '/htdocs/index.php');
+        $request->setServer('REQUEST_URI', '/htdocs/path/12/');
+		$request->setServer('REQUEST_METHOD', 'GET');
+		$request->setServer('HTTPS', false);
+		
+		$route = new Route('GET', '/path/:id/', '');
+		$this->assertTrue($route->matches($request));
+		$params = $route->getMatchedParameters();
+		$this->assertEquals(count($params), 1);
+		$this->assertEquals($params[0], 12);
+	}
+	
+	public function testBehavior_multipleMatchedParameters()
+	{
+	    $request = new Request();
+        $request->setServer('SCRIPT_NAME', '/htdocs/index.php');
+        $request->setServer('REQUEST_URI', '/htdocs/path/12/foo/');
+		$request->setServer('REQUEST_METHOD', 'GET');
+		$request->setServer('HTTPS', false);
+		
+		$route = new Route('GET', '/path/:id/:name/', '');
+		$this->assertTrue($route->matches($request));
+		$params = $route->getMatchedParameters();
+		$this->assertEquals(count($params), 2);
+		$this->assertEquals($params[0], 12);
+		$this->assertEquals($params[1], 'foo');
+	}
 };
 ?>
