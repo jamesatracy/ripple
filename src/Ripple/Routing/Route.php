@@ -118,7 +118,7 @@ class Route
 	 */
 	public function dispatch($request)
 	{
-	    if($this->action) {
+	    if($this->action && $this->action instanceof \Ripple\Routing\RouteActionInterface) {
 	        return $this->action->run($request, $this->parameters);
 	    }
 	    throw new \RuntimeException('Invalid Route Action');
