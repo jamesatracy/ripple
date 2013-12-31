@@ -2,6 +2,7 @@
 namespace Ripple\Routing;
 
 use \Ripple\HTTP\Request;
+use \Ripple\Routing\RouteActionInterface;
 
 /**
  * Holds information for an HTTP route.
@@ -118,7 +119,7 @@ class Route
 	 */
 	public function dispatch($request)
 	{
-	    if($this->action && $this->action instanceof \Ripple\Routing\RouteActionInterface) {
+	    if($this->action && $this->action instanceof RouteActionInterface) {
 	        return $this->action->run($request, $this->parameters);
 	    }
 	    throw new \RuntimeException('Invalid Route Action');
