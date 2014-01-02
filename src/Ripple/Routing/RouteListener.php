@@ -14,7 +14,7 @@ use Ripple\Routing\RouteCollection;
 class RouteListener extends EventListener
 {
     /** @var array Map of events and callback function names */
-    protected $eventMap = array(
+    protected $event_map = array(
         'http.request' => 'onRequest'    
     );
     

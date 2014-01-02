@@ -11,8 +11,17 @@ namespace Ripple\Events;
 class EventListener
 {
     /** @var array Map of events and callback function names */
-    protected $eventMap = array();
+    protected $event_map = array();
     
+    /**
+     * Set the event map.
+     * @since 0.1.0
+     * @param array $event_map
+     */
+    public function setEventMap($event_map)
+    {
+        $this->event_map = $event_map;
+    }
     /**
      * Subscribes the EventListener object to its events on the given dispatcher.
      * @since 0.1.0
@@ -20,7 +29,7 @@ class EventListener
      */
     public function subscribe(Dispatcher $dispatcher)
     {
-       foreach($eventMap as $event => $callback) {
+       foreach($this->event_map as $event => $callback) {
            $dispatcher->on($event, array($this, $callback));
        } 
     }
