@@ -17,9 +17,9 @@ class Route
 	protected $methods = array();
 	
 	/** @var string The route path. */
-	protected $route = '';
+	protected $path = '';
 	
-	/** @var Ripple\Routing\RouteAction The route action. */
+	/** @var Ripple\Routing\RouteActionInterface The route action. */
 	protected $action = '';
 	
 	/** @var bool Whether or not the route requires a secure connection */
@@ -98,7 +98,6 @@ class Route
 		// match path
 		if($this->path === $path) {
 			// exact match
-			$this->parameters = array();
 			return true;
 		}
 		if(preg_match("{^".$this->regex."$}", $path)) {
