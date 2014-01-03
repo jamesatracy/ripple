@@ -32,6 +32,16 @@ class RouteListener extends EventListener
     }
     
     /**
+     * Creates a new RouteListener and binds it to the given RouteCollection.
+     * @since 0.1.0
+     * @param \Ripple\Routing\RouteCollection $collection
+     */
+    public static function create(RouteCollection $collection)
+    {
+        return new RouteListener($collection);
+    }
+    
+    /**
      * Called when the http.request event is triggered.
      * @since 0.1.0
      * @return mixed

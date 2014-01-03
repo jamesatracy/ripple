@@ -31,7 +31,9 @@ class EventListener
     {
        foreach($this->event_map as $event => $callback) {
            $dispatcher->on($event, array($this, $callback));
-       } 
+       }
+       
+       return $this;
     }
 };
 ?>
