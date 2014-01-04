@@ -47,11 +47,20 @@ class RouteListener extends EventListener
     /**
      * Called when the http.request event is triggered.
      * @since 0.1.0
+     * @param \Ripple\HTTP\HttpRequestEvent
      * @return mixed
      */
-    public function onRequest()
+    public function onRequest($event)
     {
-        // TODO: attempt to match the request with a route in the bound RouteCollection
+        // attempt to match the request with a route in the bound RouteCollection
+        $request = $event->getRequest();
+        $response = $this->collection->match($request);
+        if($response === false) {
+            // no match, return null so the event continues to propagate
+            return null;
+        }
+        // we got a valid response, so return it
+        return $response;
     }
 };
 ?>
