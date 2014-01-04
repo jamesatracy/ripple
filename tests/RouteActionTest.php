@@ -6,7 +6,7 @@ require_once __DIR__.'/../src/Ripple/HTTP/Request.php';
 require_once __DIR__.'/../src/Ripple/Routing/RouteActionInterface.php';
 require_once __DIR__.'/../src/Ripple/Routing/RouteAction.php';
 
-function global_callback($request)
+function route_action_test_cb($request)
 {
     return true;    
 }
@@ -44,7 +44,7 @@ class RouteActionTest extends PHPUnit_Framework_TestCase
 	public function testBehavior_globalCallback()
 	{
 	    $request = new Request();
-	    $action = new RouteAction('global_callback');
+	    $action = new RouteAction('route_action_test_cb');
 	    $this->assertTrue($action->run($request));
 	}
 	

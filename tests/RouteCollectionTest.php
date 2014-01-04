@@ -13,7 +13,7 @@ require_once __DIR__.'/../src/Ripple/Routing/RouteAction.php';
 require_once __DIR__.'/../src/Ripple/Routing/RouteCollection.php';
 
 
-function global_callback($request)
+function route_collection_test_cb($request)
 {
     return 'Hello World';    
 }
@@ -34,7 +34,7 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
 		$request->setServer('REQUEST_METHOD', 'GET');
 		$request->setServer('HTTPS', false);
 		
-		$action = new RouteAction('global_callback');
+		$action = new RouteAction('route_collection_test_cb');
 		
 		$route = new Route('GET', '/path/', $action);
 		$collection->addRoute($route);
@@ -54,7 +54,7 @@ class RouteCollectionTest extends PHPUnit_Framework_TestCase
 		$request->setServer('REQUEST_METHOD', 'GET');
 		$request->setServer('HTTPS', false);
 		
-		$action = new RouteAction('global_callback');
+		$action = new RouteAction('route_collection_test_cb');
 		
 		$route = new Route('POST', '/path/', $action);
 		$collection->addRoute($route);
