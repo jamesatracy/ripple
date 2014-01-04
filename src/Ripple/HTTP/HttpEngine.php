@@ -3,6 +3,9 @@ namespace Ripple\HTTP;
 
 use Ripple\Events\Dispatcher;
 use Ripple\HTTP\HttpEvents;
+use Ripple\HTTP\HttpRequestEvent;
+use Ripple\HTTP\HttpRequestExceptionEvent;
+use Ripple\HTTP\HttpResponseEvent;
 use Ripple\HTTP\HttpStatus;
 use Ripple\HTTP\Request;
 use Ripple\HTTP\Response;
@@ -16,6 +19,7 @@ use Ripple\HTTP\Response;
  */
 class HttpEngine
 {
+    /** @var \Ripple\Events\Dispatcher */
     protected $dispatcher = null;
     
     /**
@@ -53,26 +57,26 @@ class HttpEngine
         try {
             // trigger a request event and give the application an opportunity
             // to return a response
-            $response = $this->dispatcher->until(HttpEvents::REQUEST);
+            $response = $this->dispatcher->until(HttpEvents::REQUEST, new HttpRequestEvent($this, $request));
             if($response && $response instanceof Response) {
-                return $this->finishResponse($response);
+                return $this->finishResponse($request, $response);
             }
             
             // the application did not respond to the request so create a
             // 404 response
             $response = Response::create(HttpStatus::NOT_FOUND, '');
-            return $this->finishResponse($response);
+            return $this->finishResponse($request, $response);
         } catch($e) {
             // uncaught exception
             // give the application a chance to handle it
-            $response = $this->dispatcher->until(HttpEvents::EXCEPTION);
+            $response = $this->dispatcher->until(HttpEvents::EXCEPTION, new HttpRequestExceptionEvent($this, $request, $e));
             if($response && $response instanceof Response) {
-                return $this->finishResponse($response);
+                return $this->finishResponse($request, $response);
             }
             
             // create a 500 response
             $response = Response::create(HttpStatus::INTERNAL_SERVER_ERROR, '');
-            return $this->finishResponse($response);
+            return $this->finishResponse($request, $response);
         }
     }
     
@@ -82,13 +86,13 @@ class HttpEngine
      * @param \Ripple\HTTP\Response $response
      * @return bool
      */
-    protected function finishResponse(Response $response)
+    protected function finishResponse(Request $request, Response $response)
     {
         // trigger a response event and give the application an opportunity 
         // to modify the response object
-        $this->dispatcher->trigger(HttpEvents::RESPONSE, $response);
+        $this->dispatcher->trigger(HttpEvents::RESPONSE, new HttpResponseEvent($this, $request, $response));
         
-        return $this->sendResponse($response);
+        return $this->sendResponse($request, $response);
     }
     
     /**
@@ -97,14 +101,14 @@ class HttpEngine
      * @param \Ripple\HTTP\Response $response
      * @return bool
      */
-    protected function sendResponse(Response $response)
+    protected function sendResponse(Request $request, Response $response)
     {
         // finally, send the response
         $response->send();
         
         // give the application a chance to perform any shut down operations
         // after the response is sent
-        $this->dispatcher->trigger(HttpEvents::FINISHED);
+        $this->dispatcher->trigger(HttpEvents::FINISHED, new HttpResponseEvent($this, $request, $response));
         
         return true;
     }
