@@ -1,11 +1,14 @@
 <?php
 namespace Ripple\Routing;
 
+use Ripple\HTTP\HttpEvents;
 use Ripple\Events\EventListener;
 use Ripple\Routing\RouteCollection;
 
 /**
- * Base class for EventListener objects.
+ * RouteListener is an EventListener that binds to a RouteCollection and
+ * and attempts to match it to a request when the http.request event is
+ * triggered.
  *
  * @since 0.1.0
  * @author	James Tracy <james.a.tracy@gmail.com>
@@ -15,7 +18,7 @@ class RouteListener extends EventListener
 {
     /** @var array Map of events and callback function names */
     protected $event_map = array(
-        'http.request' => 'onRequest'    
+        HttpEvents::REQUEST => 'onRequest'    
     );
     
     /** @var \Ripple\Routing\RouteCollection */

@@ -2,6 +2,7 @@
 namespace Ripple\HTTP;
 
 use Ripple\Events\Dispatcher;
+use Ripple\HTTP\HttpEvents;
 use Ripple\HTTP\HttpStatus;
 use Ripple\HTTP\Request;
 use Ripple\HTTP\Response;
@@ -52,7 +53,7 @@ class HttpEngine
         try {
             // trigger a request event and give the application an opportunity
             // to return a response
-            $response = $this->dispatcher->until('http.request');
+            $response = $this->dispatcher->until(HttpEvents::REQUEST);
             if($response && $response instanceof Response) {
                 return $this->finishResponse($response);
             }
@@ -64,7 +65,7 @@ class HttpEngine
         } catch($e) {
             // uncaught exception
             // give the application a chance to handle it
-            $response = $this->dispatcher->until('http.exception');
+            $response = $this->dispatcher->until(HttpEvents::EXCEPTION);
             if($response && $response instanceof Response) {
                 return $this->finishResponse($response);
             }
@@ -85,7 +86,7 @@ class HttpEngine
     {
         // trigger a response event and give the application an opportunity 
         // to modify the response object
-        $this->dispatcher->trigger('http.response', $response);
+        $this->dispatcher->trigger(HttpEvents::RESPONSE, $response);
         
         return $this->sendResponse($response);
     }
@@ -103,7 +104,7 @@ class HttpEngine
         
         // give the application a chance to perform any shut down operations
         // after the response is sent
-        $this->dispatcher->trigger('http.finished');
+        $this->dispatcher->trigger(HttpEvents::FINISHED);
         
         return true;
     }
