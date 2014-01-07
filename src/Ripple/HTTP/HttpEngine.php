@@ -66,7 +66,7 @@ class HttpEngine
             // 404 response
             $response = Response::create(HttpStatus::NOT_FOUND, '');
             return $this->finishResponse($request, $response);
-        } catch($e) {
+        } catch(\Exception $e) {
             // uncaught exception
             // give the application a chance to handle it
             $response = $this->dispatcher->until(HttpEvents::EXCEPTION, new HttpRequestExceptionEvent($this, $request, $e));
