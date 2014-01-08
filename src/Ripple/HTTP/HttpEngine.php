@@ -51,6 +51,7 @@ class HttpEngine
      * HttpEngine will send a 500 response.
      * @since 0.1.0
      * @param \Ripple\HTTP\Request $request
+     * @return \Ripple\HTTP\Response
      */
     public function handle(Request $request)
     {
@@ -99,7 +100,7 @@ class HttpEngine
      * Send the response object.
      * @since 0.1.0
      * @param \Ripple\HTTP\Response $response
-     * @return bool
+     * @return \Ripple\HTTP\Response
      */
     protected function sendResponse(Request $request, Response $response)
     {
@@ -110,7 +111,7 @@ class HttpEngine
         // after the response is sent
         $this->dispatcher->trigger(HttpEvents::FINISHED, new HttpResponseEvent($this, $request, $response));
         
-        return true;
+        return $response;
     }
 };
 ?>
