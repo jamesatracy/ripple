@@ -13,22 +13,14 @@ function hello_world($request)
 $request = new Ripple\HTTP\Request();
 $request->fromGlobals();
 
-// 2) make a route collection
-$routes = new Ripple\Routing\RouteCollection();
-
-// 3) create routes
-$action = new Ripple\Routing\RouteAction('hello_world');
-$route = new Ripple\Routing\Route('GET', '/', $action);
-$routes->addRoute($route);
-
-// 4) create event dispatcher
+// 2) create event dispatcher
 $dispatcher = new Ripple\Events\Dispatcher();
 
-// 5) subscribe route listener
-$listener = new Ripple\Routing\RouteListener($routes);
-$listener->subscribe($dispatcher);
+// 3) create routes
+$router = new Ripple\Routing\Router($dispatcher);
+$router->get('/', 'hello_world');
 
-// 6) create and start http engine
+// 4) create and start http engine
 $http = new Ripple\HTTP\HttpEngine($dispatcher);
 $http->handle($request);
 ?>
