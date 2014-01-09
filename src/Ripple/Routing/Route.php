@@ -71,6 +71,26 @@ class Route
 	}
 	
 	/**
+	 * Set the secure flag for this route
+	 * @since 0.1.0
+	 * @param bool $secure
+	 */
+	public function secure($secure)
+	{
+	    $this->secure = $secure;
+	}
+	
+	/**
+	 * Check whether or not this route is secure
+	 * @since 0.1.0
+	 * @return bool
+	 */
+	public function isSecure()
+	{
+	    return $this->secure;
+	}
+	
+	/**
 	 * Returns true if the request matches the route.
 	 * Any matched route parameters can be retrieved through 
 	 * getMatchedParameters().

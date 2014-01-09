@@ -17,6 +17,12 @@ class Router
     /** @var \Ripple\Routing\RouteListener */
     protected $listener = null;
     
+    /** @var array */
+    protected $aliases = array();
+    
+    /** @var \Ripple\Routing\Route */
+    protected $lastRoute = null;
+    
     /**
      * @constructor
      * @since 0.1.0
@@ -37,7 +43,7 @@ class Router
      */
     public function get($path, $callback)
     {
-        $this->add('GET', $path, $callback);
+        return $this->add('GET', $path, $callback);
     }
     
     /**
@@ -48,7 +54,7 @@ class Router
      */
     public function post($path, $callback)
     {
-        $this->add('POST', $path, $callback);
+        return $this->add('POST', $path, $callback);
     }
     
     /**
@@ -59,7 +65,7 @@ class Router
      */
     public function put($path, $callback)
     {
-        $this->add('PUT', $path, $callback);
+        return $this->add('PUT', $path, $callback);
     }
     
     /**
@@ -70,7 +76,7 @@ class Router
      */
     public function delete($path, $callback)
     {
-        $this->add('DELETE', $path, $callback);
+        return $this->add('DELETE', $path, $callback);
     }
     
     /**
@@ -81,7 +87,7 @@ class Router
      */
     public function patch($path, $callback)
     {
-        $this->add('PATCH', $path, $callback);
+        return $this->add('PATCH', $path, $callback);
     }
     
     /**
@@ -90,12 +96,32 @@ class Router
      * @param array|string $methods
      * @param string $path
      * @param mixed $callback
+     * @return \Ripple\Routing\Router
      */
     public function add($methods, $path, $callback)
     {
         $action = new RouteAction($callback);
         $route = new Route($methods, $path, $action);
         $this->collection->addRoute($route);
+        $this->lastRoute = $route;
+        return $this;
+    }
+    
+    /**
+     * Create an alias for the last route added
+     * @since 0.1.0
+     * @param string $alias
+     * @return \Ripple\Routing\Router
+     * @throws \RuntimeException
+     */
+    public function alias($alias)
+    {
+        if($this->lastRoute) {
+            if(isset($this->aliases[$alias])) {
+                throw new \RuntimeException('Duplicate alias: '.$alias);
+            }
+            $this->aliases[$alias] = $this->lastRoute->getPath();
+        }
     }
 };
 ?>
