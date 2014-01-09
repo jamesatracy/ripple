@@ -1,10 +1,6 @@
 <?php
 namespace Ripple\HTTP;
 
-use Ripple\HTTP\HttpEngine;
-use Ripple\HTTP\Request;
-use Ripple\HTTP\Response;
-
 /**
  * Response event object that is passed along with http.response events.
  * Contains the response, request, and the HttpEngine that dispatched it.

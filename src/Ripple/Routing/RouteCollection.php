@@ -3,7 +3,6 @@ namespace Ripple\Routing;
 
 use \Ripple\HTTP\Request;
 use \Ripple\HTTP\Response;
-use \Ripple\Routing\Route;
 
 /**
  * Maintains a collection of routes and, given a request, attempts to match

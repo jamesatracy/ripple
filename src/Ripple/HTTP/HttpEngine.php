@@ -2,13 +2,6 @@
 namespace Ripple\HTTP;
 
 use Ripple\Events\Dispatcher;
-use Ripple\HTTP\HttpEvents;
-use Ripple\HTTP\HttpRequestEvent;
-use Ripple\HTTP\HttpRequestExceptionEvent;
-use Ripple\HTTP\HttpResponseEvent;
-use Ripple\HTTP\HttpStatus;
-use Ripple\HTTP\Request;
-use Ripple\HTTP\Response;
 
 /**
  * HttpEngine processes a request and attempts to generate a response.
