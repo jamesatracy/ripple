@@ -3,7 +3,6 @@ namespace Ripple\Routing;
 
 use Ripple\HTTP\HttpEvents;
 use Ripple\Events\EventListener;
-use Ripple\Routing\RouteCollection;
 
 /**
  * RouteListener is an EventListener that binds to a RouteCollection and
