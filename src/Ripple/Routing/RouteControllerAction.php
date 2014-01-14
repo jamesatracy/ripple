@@ -4,26 +4,29 @@ namespace Ripple\Routing;
 use \Ripple\HTTP\Request;
 
 /**
- * Represents a basic action to take on a matched route.
- * The action must be a valid 'callable' string or array that can be
- * passed to call_user_func_array().
+ * Handles routing to a controller method. A controller is simpley a class
+ * with action handler methods.
  *
  * @since 0.1.0
  * @author	James Tracy <james.a.tracy@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  */
-class RouteAction implements RouteActionInterface
+class RouteControllerAction implements RouteActionInterface
 {
-    /** @var string|array */
-    protected $callable = null;
+    /** @var string */
+    protected $controller = null;
+    
+    /** @var string */
+    protected $method = null;
     
     /**
      * @constructor
      * @param string|array $callable Valid argument for call_user_func_array()
      */
-    public function __construct($callable)
+    public function __construct($controller, $method)
     {
-       $this->callable = $callable;
+       $this->controller = $controller;
+       $this->method = $method;
     }
     
     /**
@@ -37,10 +40,18 @@ class RouteAction implements RouteActionInterface
      */
     public function run(Request $request, $args = array())
     {
-        if($this->callable) {
+        if($this->controller && $this->method) {
+            $controller = $this->controller;
+            $method = $this->method;
+            
             // request is the first argument
             array_unshift($args, $request);
-            $response = \call_user_func_array($this->callable, $args);
+            
+            $obj = new $controller;
+            if(!method_exists($obj, $method)) {
+                throw new \RuntimeException($controller.': Has no method '.$method);
+            }
+            $response = \call_user_func_array(array($obj, $method), $args);
             return $response;
         }
         throw new \RuntimeException('Invalid Route Action');

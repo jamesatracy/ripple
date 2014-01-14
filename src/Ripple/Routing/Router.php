@@ -100,7 +100,26 @@ class Router
      */
     public function add($methods, $path, $callback)
     {
-        $action = new RouteAction($callback);
+        // determine what kind of action this represents
+        if($callable instanceof RouteActionInterface) {
+            $action = $callable;
+        } else {
+            if(is_string($callback)) {
+                $arr = explode('@', $callback);
+                if(count($arr) === 1) {
+                    // simple action
+                    $action = new RouteAction($callback);
+                } else {
+                    // controller action
+                    // format: ControllerClassName@methodName
+                    $action = new RouteControllerAction($arr[0], $arr[1]);
+                }
+            } else {
+                // simple action
+                $action = new RouteAction($callback);
+            }
+        }
+        
         $route = new Route($methods, $path, $action);
         $this->collection->addRoute($route);
         $this->lastRoute = $route;
