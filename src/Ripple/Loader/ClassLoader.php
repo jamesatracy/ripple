@@ -1,6 +1,6 @@
 <?php
 namespace Ripple\Loader;
-require __DIR__.'/FileLoader.php';
+require_once __DIR__.'/FileLoader.php';
 
 /**
  * ClassLoader implementation that implements the technical interoperability
