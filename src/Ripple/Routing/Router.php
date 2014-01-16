@@ -101,7 +101,7 @@ class Router
     public function add($methods, $path, $callback)
     {
         // determine what kind of action this represents
-        if($callable instanceof RouteActionInterface) {
+        if($callback instanceof RouteActionInterface) {
             $action = $callable;
         } else {
             if(is_string($callback)) {

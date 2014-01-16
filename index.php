@@ -1,8 +1,8 @@
 <?php
-require __DIR__.'/src/Ripple/Loader/ClassLoader.php';
+require __DIR__.'/src/Ripple/Loader/Modules.php';
 
-$loader = new Ripple\Loader\ClassLoader('Ripple', __DIR__.'/src');
-$loader->register();
+$modules = new Ripple\Loader\Modules();
+$modules->add(__DIR__.'/src/Ripple');
 
 function hello_world($request)
 {
