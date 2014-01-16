@@ -10,7 +10,7 @@ class RouteControllerActionTestController
 {
     public function route_action_test_cb($request)
     {
-        return true;    
+        return true;
     }
     
     public function argumentTestCallback()

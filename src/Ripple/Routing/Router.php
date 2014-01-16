@@ -141,6 +141,7 @@ class Router
             }
             $this->aliases[$alias] = $this->lastRoute->getPath();
         }
+        return $this;
     }
 };
 ?>
