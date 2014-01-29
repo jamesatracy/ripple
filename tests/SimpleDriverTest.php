@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/../src/Ripple/View/Drivers/ViewDriverInterface.php';
 require_once __DIR__.'/../src/Ripple/View/Drivers/SimpleDriver.php';
 
 /**

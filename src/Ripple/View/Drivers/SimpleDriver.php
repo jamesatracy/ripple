@@ -9,7 +9,7 @@ namespace Ripple\View\Drivers;
  * @author	James Tracy <james.a.tracy@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  */
-class SimpleDriver
+class SimpleDriver implements ViewDriverInterface
 {
     /** 
      * Render the view and return the output string.
